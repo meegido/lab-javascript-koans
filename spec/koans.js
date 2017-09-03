@@ -93,32 +93,32 @@ describe("the JavaScript language", function() {
       var a = [1,2,3];
       var b = [4,5,6];
 
-      expect(a + b).toEqual();
+      expect(a + b).toEqual('1,2,34,5,6');
     });
 
     it("joins arrays and strings", function() {
       var a = [1,2,3];
 
-      //expect ("1" + a).toEqual();
-      //expect(a + "1").toEqual();
+      expect ("1" + a).toEqual("11,2,3");
+      expect(a + "1").toEqual("1,2,31");
     });
 
     it("joins arrays and other things", function() {
       var a = [1,2,3];
       var b = ['x', 'y', 'z'];
 
-      //expect(1 + a).toEqual();
-      //expect(a + 1).toEqual();
-      //expect(1 + b).toEqual();
-      //expect(true + a).toEqual();
+      expect(1 + a).toEqual("11,2,3");
+      expect(a + 1).toEqual("1,2,31");
+      expect(1 + b).toEqual('1x,y,z');
+      expect(true + a).toEqual('true1,2,3');
     });
 
     it("can't compare arrays", function() {
       var a = [1,2,3];
       var b = [1,2,3];
 
-      //expect(a == b).toBe.....();  // Truthy or Falsy
-      //expect(a === b).toBe.....(); // Truthy or Falsy
+      expect(a == b).toBeFalsy();  // Truthy or Falsy
+      expect(a === b).toBeFalsy(); // Truthy or Falsy
     });
 
     it("is not the same to compare by value than by reference ", function() {
@@ -137,7 +137,7 @@ describe("the JavaScript language", function() {
         return 'some example';
       }
 
-      //expect(example()).toEqual();
+      expect(example()).toEqual('some example');
     });
 
     it("can declare anonymous functions", function() {
@@ -145,8 +145,8 @@ describe("the JavaScript language", function() {
         return a + b;
       };
 
-      //expect(typeof(someVar)).toBe();
-      //expect(someVar(1,1)).toBe();
+      expect(typeof(someVar)).toBe('function');
+      expect(someVar(1,1)).toBe(2);
     });
 
     it("may return anything", function() {
@@ -156,7 +156,7 @@ describe("the JavaScript language", function() {
 
       var result = example(2);
 
-      //expect(result[1]).toEqual();
+      expect(result[1]).toEqual(4);
     });
 
     it("may return arrays that contains functions and so on", function() {
@@ -172,7 +172,7 @@ describe("the JavaScript language", function() {
           return exampleB(1);
       }
 
-      //expect(exampleA()).toEqual();
+      expect(exampleA()).toEqual(1);
 
       function exampleB(arg1) {
           return arg1;
@@ -184,11 +184,11 @@ describe("the JavaScript language", function() {
           return exampleB(1);
       };
 
-      //expect(exampleA()).toEqual(1);
-
       var exampleB = function(arg1) {
           return arg1;
       };
+
+      expect(exampleA()).toEqual(1);
     });
 
     it("can use optional parameters", function() {
@@ -199,16 +199,16 @@ describe("the JavaScript language", function() {
         return a + b;
       }
 
-      //expect(example(1,1,1)).toBe();
-      //expect(example(1,1)).toBe();
+      expect(example(1,1,1)).toBe(3);
+      expect(example(1,1)).toBe(2);
     });
 
     it("anonymous functions are anonymous", function() {
       var x = function z() {
         return 1;
       };
-      //expect(typeof(z)).toEqual();
-      //expect(x()).toEqual();
+      expect(typeof(z)).toEqual('undefined');
+      expect(x()).toEqual(1);
     });
 
     it("can create closures with free variables", function() {
@@ -222,7 +222,7 @@ describe("the JavaScript language", function() {
         return internal();
       }
 
-      //expect(external()).toBe();
+      expect(external()).toBe(2);
     });
 
     it("can create closures with several free variables", function() {
@@ -240,27 +240,29 @@ describe("the JavaScript language", function() {
 
     it("defines a pure function when there are no free variables", function() {
       function external() {
-        var a = 1, b = 2;
+        var a = 1, b = 2; //no free variables, no hace referencia a ellas
 
         function internal(a, b) {
           var c = 1;
-          return a + b + c;
+          return a + b + c; // a y b hacen referencia a los parámetros con que se llama a internal
         }
 
         return internal(4,4);
       }
 
-      //expect(external()).toBe();
+      expect(external()).toBe(9);
     });
 
     it("may return arrays that contains closures and so on", function() {
       function example() {
         // write the missing code here
+
+
       }
 
-      //expect(example()[0](1)[1]).toEqual(10);
-      //expect(example()[0](2)[1]).toEqual(11);
-      //expect(example()[0](3)[1]).toEqual(12);
+      // expect(example()[0](1)[1]).toEqual(10);
+      // expect(example()[0](2)[1]).toEqual(11);
+      // expect(example()[0](3)[1]).toEqual(12);
     });
 
     it("passes primitive types as values (a copy) to functions", function() {
@@ -273,13 +275,13 @@ describe("the JavaScript language", function() {
       var z = true;
 
       example(x);
-      //expect(x).toEqual();
+      expect(x).toEqual(1);
 
       example(y);
-      //expect(y).toEqual();
+      expect(y).toEqual("example");
 
       example(z);
-      //expect(z).toEqual();
+      expect(z).toEqual(true);
     });
 
     it("passes arrays by reference", function() {
@@ -290,7 +292,7 @@ describe("the JavaScript language", function() {
       var x = [1,2,3];
 
       example(x);
-      //expect(x).toEqual();
+      expect(x).toEqual([100,2,3]);
     });
 
     it("passes objects by reference", function() {
@@ -301,7 +303,7 @@ describe("the JavaScript language", function() {
       var x = { property: 'cool!' };
 
       example(x);
-      //expect(x).toEqual();
+      expect(x).toEqual({ property: 'test' });
     });
 
     it("may return a function as the result of invoking a function", function() {
@@ -313,9 +315,9 @@ describe("the JavaScript language", function() {
         return add;
       }
 
-      //expect(example()(1,2)).toEqual();
+      expect(example()(1,2)).toEqual(3);
       var f = example();
-      //expect(f(2,2)).toEqual();
+      expect(f(2,2)).toEqual(4);
     });
 
     it("can return closures as a function result", function() {
@@ -327,7 +329,7 @@ describe("the JavaScript language", function() {
 
       var f = plus(5);
 
-      //expect(f(3)).toBe();
+      expect(f(3)).toBe(8);
     });
 
     it("can have functions that receive other functions as arguments", function() {
@@ -339,7 +341,7 @@ describe("the JavaScript language", function() {
         return arg(2,2) + 1;
       }
 
-      //expect(example(add)).toEqual();
+      expect(example(add)).toEqual(5);
     });
 
     it("may have functions as the input and the output", function() {
